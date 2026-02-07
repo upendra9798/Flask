@@ -16,3 +16,9 @@ This will properly set up the context and allow db.create_all() to work:-
 from app import app, db
 with app.app_context():
     db.create_all()
+
+
+FOR DEPLOYMENT 
+    (in env)
+    pip install gunicorn
+    pip freeze > requirements.txt
