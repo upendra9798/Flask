@@ -1,4 +1,6 @@
-from flask import Flask,render_template,request,redirect
+import os
+
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -6,6 +8,10 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///todo.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+with app.app_context():
+    # Ensure tables exist on first run in a fresh environment.
+    db.create_all()
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -69,5 +75,7 @@ def delete(sno):
 #     app.run(debug=True)
 
 if __name__ == '__main__':
-    app.run(debug=True,port=8000) #To change default port
+    # app.run(debug=True,port=8000) #To change default port
     # For development debug=true, to see what the error is
+    port = int(os.environ.get('PORT', 8000))
+    app.run(debug=False, port=port)
